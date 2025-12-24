@@ -95,18 +95,6 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
           
           {/* Action Buttons */}
           <div className="mt-auto flex gap-2 pt-4 border-t border-border/50">
-            {project.githubUrl && (
-              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all"
-                >
-                  <Github className="w-4 h-4" />
-                  Source Code
-                </Button>
-              </Link>
-            )}
             {project.demoUrl && (
               <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                 <Button 
