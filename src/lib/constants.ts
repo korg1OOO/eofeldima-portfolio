@@ -3,6 +3,7 @@
 export const SITE_CONFIG = {
   name: "Enzo Feldman",
   description: "Full-Stack Developer | Blockchain Developer",
+  ogImage: "https://res.cloudinary.com/dfawdodax/image/upload/v1766289988/sr5k6nj3rju2inraueb6.png",
   url: "https://eofeldima.vercel.app",
   links: {
     email: "enzomichelfeldman@gmail.com",
