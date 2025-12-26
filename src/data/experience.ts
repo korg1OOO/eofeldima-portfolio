@@ -19,7 +19,7 @@ export const experienceData: Experience[] = [
     role: "Software Development",
     duration: "Jun 2025 - Today",
     location: "Foz do Iguaçu, Brazil",
-    description: "Built a SAAS website for an existing desktop application and working on a new mobile app implementation for a new niche",
+    description: "Built a SAAS website for an existing desktop application and working on a new mobile app implementation for restaurants",
     achievements: [
 
     ],
