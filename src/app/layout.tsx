@@ -1,3 +1,4 @@
+// app/layout.tsx
 import { Inter, Playfair_Display } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
@@ -11,13 +12,14 @@ import { generateMetadata } from "./metadata";
 import { JsonLd } from "@/components/seo/json-ld";
 import { CustomCursor } from "@/components/common/enhanced-cursor";
 import { Analytics } from "@vercel/analytics/next";
+import { LanguageProvider } from "./contexts/LanguageContext";
+
 export const metadata = generateMetadata();
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-display",
@@ -29,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt" suppressHydrationWarning>
       <head>
         <link rel="icon" href="https://res.cloudinary.com/dfawdodax/image/upload/v1766289988/sr5k6nj3rju2inraueb6.png?v=2" sizes="any" />
         <link rel="icon" href="https://res.cloudinary.com/dfawdodax/image/upload/v1766289988/sr5k6nj3rju2inraueb6.png?v=2" type="image/x-icon" />
@@ -45,20 +47,22 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClientLayout>
-            <CustomCursor />
-            <Suspense fallback={null}>
-              <NavigationEvents />
-            </Suspense>
-            <div className="relative flex min-h-screen flex-col">
-              <Navbar />
-              <PageWrapper>
-                <main className="flex-1">{children}</main>
-              </PageWrapper>
-              <Footer />
-            </div>
-          </ClientLayout>
-          <Analytics />
+          <LanguageProvider>
+            <ClientLayout>
+              <CustomCursor />
+              <Suspense fallback={null}>
+                <NavigationEvents />
+              </Suspense>
+              <div className="relative flex min-h-screen flex-col">
+                <Navbar />
+                <PageWrapper>
+                  <main className="flex-1">{children}</main>
+                </PageWrapper>
+                <Footer />
+              </div>
+            </ClientLayout>
+            <Analytics />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

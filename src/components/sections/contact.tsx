@@ -9,21 +9,23 @@ import { useForm as useFormspree } from "@formspree/react";
 import { ANIMATION_VARIANTS, SITE_CONFIG } from "@/lib/constants";
 import { Mail, Phone, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/app/contexts/LanguageContext";
+import { translations } from "@/lib/translations";
 
-// Form validation schema
 const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  message: z.string().min(20, "Message must be at least 20 characters"),
+  name: z.string().min(2, "O nome deve ter pelo menos 2 caracteres"),
+  email: z.string().email("Por favor, insira um email válido"),
+  subject: z.string().min(5, "O assunto deve ter pelo menos 5 caracteres"),
+  message: z.string().min(20, "A mensagem deve ter pelo menos 20 caracteres"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
 export function Contact() {
+  const { language } = useLanguage();
+  const t = translations[language];
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   
-  // Use Formspree's official React hook
   const [formspreeState, submitToFormspree] = useFormspree("mrezjnnd");
 
   const {
@@ -37,7 +39,6 @@ export function Contact() {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      // Submit directly using Formspree's hook - this bypasses spam filtering
       await submitToFormspree(data);
     } catch (error) {
       console.error('Form submission error:', error);
@@ -45,7 +46,6 @@ export function Contact() {
     }
   };
 
-  // Update status based on Formspree state
   useEffect(() => {
     if (formspreeState.succeeded) {
       setSubmitStatus("success");
@@ -55,10 +55,10 @@ export function Contact() {
       setSubmitStatus("error");
     }
   }, [formspreeState.succeeded, formspreeState.errors, reset]);
+
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto max-w-5xl">
-        {/* Section Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -67,16 +67,14 @@ export function Contact() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            Get In <span className="gradient-text">Touch</span>
+            {t.contact.title} <span className="gradient-text">{t.contact.gradient}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Have a project in mind or want to collaborate? Feel free to reach out!
-            I&apos;m always open to discussing new opportunities.
+            {t.contact.subtitle}
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -86,64 +84,49 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-semibold mb-6">Let&apos;s Connect</h3>
+              <h3 className="text-2xl font-semibold mb-6">{t.contact.letsConnect}</h3>
               <p className="text-muted-foreground mb-8">
-                I&apos;m a AAS in Software Development from IFPR and
-                actively seeking opportunities in Full-Stack Development, Software Testing
-                and Emerging Technologies.
+                {t.contact.seeking}
               </p>
             </div>
-            {/* Contact Cards */}
+
             <div className="space-y-4">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-4 p-4 rounded-lg border bg-card"
-              >
+              <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-4 p-4 rounded-lg border bg-card">
                 <div className="p-3 rounded-full bg-primary/10 text-primary">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">Email</p>
-                  <a
-                    href={`mailto:${SITE_CONFIG.links.email}`}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
+                  <p className="font-medium">{t.contact.emailLabel}</p>
+                  <a href={`mailto:${SITE_CONFIG.links.email}`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                     {SITE_CONFIG.links.email}
                   </a>
                 </div>
               </motion.div>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-4 p-4 rounded-lg border bg-card"
-              >
+              <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-4 p-4 rounded-lg border bg-card">
                 <div className="p-3 rounded-full bg-primary/10 text-primary">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">Phone</p>
-                  <a
-                    href={`tel:${SITE_CONFIG.links.phone}`}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
+                  <p className="font-medium">{t.contact.phoneLabel}</p>
+                  <a href={`tel:${SITE_CONFIG.links.phone}`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                     {SITE_CONFIG.links.phone}
                   </a>
                 </div>
               </motion.div>
             </div>
 
-            {/* Availability Status */}
             <div className="p-6 rounded-xl bg-primary/5 border border-primary/20">
               <div className="flex items-center gap-2 mb-2">
                 <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse" />
-                <span className="font-medium">Available for opportunities</span>
+                <span className="font-medium">{t.contact.available}</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Open to Full-time, Part-time and Freelancing roles
+                {t.contact.openTo}
               </p>
             </div>
           </motion.div>
-          {/* Contact Form */}
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -151,125 +134,58 @@ export function Contact() {
             variants={ANIMATION_VARIANTS.fadeUp}
             transition={{ delay: 0.3 }}
           >
-            <form 
-              onSubmit={handleSubmit(onSubmit)} 
-              className="space-y-6"
-            >
-              {/* Name Field */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name
-                </label>
-                <input
-                  {...register("name")}
-                  type="text"
-                  id="name"
-                  className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Your name"
-                />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>
-                )}
+                <label htmlFor="name" className="block text-sm font-medium mb-2">{t.contact.name}</label>
+                <input {...register("name")} type="text" id="name" className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder={t.contact.name} />
+                {errors.name && <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>}
               </div>
 
-              {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email
-                </label>
-                <input
-                  {...register("email")}
-                  type="email"
-                  id="email"
-                  className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="your.email@example.com"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>
-                )}
-              </div>
-              {/* Subject Field */}
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                  Subject
-                </label>
-                <input
-                  {...register("subject")}
-                  type="text"
-                  id="subject"
-                  className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="What's this about?"
-                />
-                {errors.subject && (
-                  <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>
-                )}
+                <label htmlFor="email" className="block text-sm font-medium mb-2">{t.contact.email}</label>
+                <input {...register("email")} type="email" id="email" className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="seu.email@exemplo.com" />
+                {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
               </div>
 
-              {/* Message Field */}
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Message
-                </label>
-                <textarea
-                  {...register("message")}
-                  id="message"
-                  rows={5}
-                  className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                  placeholder="Tell me about your project or idea..."
-                />
-                {errors.message && (
-                  <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>
-                )}
+                <label htmlFor="subject" className="block text-sm font-medium mb-2">{t.contact.subject}</label>
+                <input {...register("subject")} type="text" id="subject" className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Sobre o que é?" />
+                {errors.subject && <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>}
               </div>
 
-              {/* Honeypot field - hidden from users but visible to bots */}
-              <input
-                type="text"
-                name="_gotcha"
-                style={{ display: 'none' }}
-                tabIndex={-1}
-                autoComplete="off"
-              />
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium mb-2">{t.contact.message}</label>
+                <textarea {...register("message")} id="message" rows={5} className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none" placeholder="Conte-me sobre seu projeto ou ideia..." />
+                {errors.message && <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>}
+              </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={formspreeState.submitting}
-                className="w-full"
-                size="lg"
-              >
+              <input type="text" name="_gotcha" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+              <Button type="submit" disabled={formspreeState.submitting} className="w-full" size="lg">
                 {formspreeState.submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Sending...
+                    {t.contact.sending}
                   </>
                 ) : (
                   <>
                     <Send className="mr-2 h-4 w-4" />
-                    Send Message
+                    {t.contact.send}
                   </>
                 )}
               </Button>
-              {/* Status Messages */}
+
               {submitStatus === "success" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 p-4 rounded-lg bg-green-500/10 text-green-600"
-                >
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 p-4 rounded-lg bg-green-500/10 text-green-600">
                   <CheckCircle className="h-5 w-5" />
-                  <p>Message sent successfully! I&apos;ll get back to you soon.</p>
+                  <p>{t.contact.success}</p>
                 </motion.div>
               )}
 
               {submitStatus === "error" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 p-4 rounded-lg bg-destructive/10 text-destructive"
-                >
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 p-4 rounded-lg bg-destructive/10 text-destructive">
                   <AlertCircle className="h-5 w-5" />
-                  <p>Something went wrong. Please try again later.</p>
+                  <p>{t.contact.error}</p>
                 </motion.div>
               )}
             </form>

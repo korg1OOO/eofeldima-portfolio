@@ -1,3 +1,4 @@
+// app/(pages)/hero.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -5,26 +6,19 @@ import Link from "next/link";
 import { ANIMATION_VARIANTS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { LazyStarsBackground } from "@/components/3d/lazy-stars";
-import { 
-  Typewriter, 
-  GradientText,
-  MagneticButton,
-  FloatingParticles
-} from "@/components/animations";
+import { Typewriter, GradientText, MagneticButton, FloatingParticles } from "@/components/animations";
+import { useLanguage } from "@/app/contexts/LanguageContext";
+import { translations } from "@/lib/translations";
 
 export function Hero() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
       <LazyStarsBackground />
-      
-      {/* Floating Particles */}
       <FloatingParticles />
-      
-      {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-lavender/10 via-transparent to-teal/10" />
-      
-      {/* Content */}
       <div className="container mx-auto px-4 py-20 relative z-10">
         <motion.div
           initial="hidden"
@@ -33,50 +27,31 @@ export function Hero() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto"
         >
-          {/* Greeting */}
           <motion.p
             variants={ANIMATION_VARIANTS.fadeDown}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground mb-4"
           >
-            Hello, I&apos;m
+            {t.hero.greeting}
           </motion.p>
-          {/* Name with gradient */}
           <motion.h1
             variants={ANIMATION_VARIANTS.scaleIn}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
-            style={{ 
-              background: "none",
-              WebkitTextFillColor: "unset"
-            }}
+            style={{ background: "none", WebkitTextFillColor: "unset" }}
           >
-            <GradientText className="font-display">
-              Enzo Feldman
-            </GradientText>
+            <GradientText className="font-display">Enzo Feldman</GradientText>
           </motion.h1>
-
-          {/* Tagline */}
           <motion.div
             variants={ANIMATION_VARIANTS.fadeUp}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-8"
           >
-            AAS in Software Development
+            {t.hero.tagline}
             <span className="block mt-2">
-              <Typewriter 
-                words={[
-                  "Full-Stack Developer",
-                  "Mobile Apps",
-                  "Blockchain Integrations",
-                  "AI Automations",
-                ]}
-                className="text-primary font-semibold"
-              />
+              <Typewriter words={t.hero.typewriter} className="text-primary font-semibold" />
             </span>
           </motion.div>
-
-          {/* CTA Buttons */}
           <motion.div
             variants={ANIMATION_VARIANTS.fadeUp}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -84,12 +59,12 @@ export function Hero() {
           >
             <MagneticButton>
               <Button asChild size="lg" className="text-sm sm:text-base px-4 sm:px-8">
-                <Link href="/projects">View Projects</Link>
+                <Link href="/projects">{t.hero.ctaProjects}</Link>
               </Button>
             </MagneticButton>
             <MagneticButton>
               <Button asChild size="lg" variant="outline" className="text-sm sm:text-base px-4 sm:px-8">
-                <Link href="/contact">Get In Touch</Link>
+                <Link href="/contact">{t.hero.ctaContact}</Link>
               </Button>
             </MagneticButton>
           </motion.div>
@@ -98,4 +73,3 @@ export function Hero() {
     </section>
   );
 }
-      

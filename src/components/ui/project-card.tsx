@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { LavenderBadge } from "@/components/ui/lavender-badge";
 import type { Project } from "@/data/projects";
 import { TiltCard } from "@/components/animations";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 interface ProjectCardProps {
   project: Project;
@@ -16,6 +17,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
+  const { language } = useLanguage();
   const [showAllTech, setShowAllTech] = useState(false);
   const techToShow = showAllTech ? project.technologies : project.technologies.slice(0, 4);
   const hasMoreTech = project.technologies.length > 4;
@@ -23,7 +25,6 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
   return (
     <TiltCard className="h-full">
       <Card className="project-card group h-full flex flex-col hover:shadow-xl transition-all duration-300 overflow-hidden border-border/50 hover:border-primary/50">
-        {/* Project Image */}
         <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10">
           {project.image ? (
             <Image
@@ -56,7 +57,6 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
             {project.description}
           </p>
           
-          {/* Key Features - Show more in detailed view */}
           {detailed && project.features && (
             <div className="mb-4 space-y-1">
               {project.features.slice(0, 2).map((feature, i) => (
@@ -68,7 +68,6 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
             </div>
           )}
           
-          {/* Technologies */}
           <div className="flex flex-wrap gap-1.5 mb-4">
             {techToShow.map((tech) => (
               <LavenderBadge key={tech}>
@@ -85,15 +84,14 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
                   className="cursor-pointer hover:bg-primary/10 hover:border-primary/50 transition-colors"
                 >
                   {showAllTech 
-                    ? "Show less" 
-                    : `+${project.technologies.length - 4} more`
+                    ? (language === "pt" ? "Mostrar menos" : "Show less")
+                    : `+${project.technologies.length - 4} ${language === "pt" ? "mais" : "more"}`
                   }
                 </LavenderBadge>
               </button>
             )}
           </div>
           
-          {/* Action Buttons */}
           <div className="mt-auto flex gap-2 pt-4 border-t border-border/50">
             {project.demoUrl && (
               <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
@@ -103,7 +101,7 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
                   className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Deployed
+                  {language === "pt" ? "Ver no ar" : "Deployed"}
                 </Button>
               </Link>
             )}

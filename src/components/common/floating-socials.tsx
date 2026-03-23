@@ -4,15 +4,19 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Twitter, Mail, FileText } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export function FloatingSocials() {
+  const { language } = useLanguage();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
+  const firstLabel = language === "pt" ? "Boletim" : "GPA";
+
   const socials = [
     {
       icon: <FileText className="h-5 w-5" />,
       href: "/boletim.pdf",
-      label: "GPA",
+      label: firstLabel,
       isDownload: true,
     },
     {
@@ -88,7 +92,6 @@ export function FloatingSocials() {
         })}
       </motion.div>
       
-      {/* Decorative line - separate fixed element */}
       <motion.div
         initial={{ opacity: 0, scaleY: 0 }}
         animate={{ opacity: 1, scaleY: 1 }}

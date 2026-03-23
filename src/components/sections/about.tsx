@@ -3,36 +3,36 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ANIMATION_VARIANTS } from "@/lib/constants";
-import { educationData } from "@/data/achievements";
+import { educationDataLang } from "@/data/achievements";
 import { GraduationCap, MapPin, Calendar } from "lucide-react";
-import { 
-  ScrollReveal, 
-  GradientText
-} from "@/components/animations";
+import { ScrollReveal, GradientText } from "@/components/animations";
+import { useLanguage } from "@/app/contexts/LanguageContext";
+import { translations } from "@/lib/translations";
 
 export function About() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
-        {/* Section Header */}
         <ScrollReveal delay={0.1} width="100%">
-<motion.div
-initial="hidden"
-whileInView="visible"
-viewport={{ once: true, amount: 0.3 }}
-variants={ANIMATION_VARIANTS.fadeUp}
-className="flex flex-col items-center text-center mb-12"
->
-<h2 className="text-4xl md:text-5xl font-display font-bold mb-4 max-w-2xl mx-auto">
-About <GradientText>Me</GradientText>
-</h2>
-<p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-18 year old brazilian developer passionate about building solutions and exploring AI and blockchain tech.
-</p>
-</motion.div>
-</ScrollReveal>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={ANIMATION_VARIANTS.fadeUp}
+            className="flex flex-col items-center text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 max-w-2xl mx-auto">
+              {t.about.title} <GradientText>{t.about.gradient}</GradientText>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              {t.about.description}
+            </p>
+          </motion.div>
+        </ScrollReveal>
 
-        {/* Introduction */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -43,25 +43,18 @@ About <GradientText>Me</GradientText>
         >
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <p className="text-lg leading-relaxed">
-                Hi! I&apos;m Enzo Feldman, a AAS in Software Development from IFPR. With a strong foundation in full-stack development and blockchain integrations,
-                I love creating eye-catching software.
-              </p>
-              <p className="text-lg leading-relaxed">
-  During my part-time role at Action Business, I built a SAAS website for an existing desktop application and developed a new mobile app for the restaurant niche, enhancing user accessibility and performance through modern technologies.
-</p>
-<p className="text-lg leading-relaxed">
-  As a Core Team member at Legacy Gaming Guild, I&apos;ve developed solutions for gamers, growing a vibrant community of over 2,700 Discord members, establishing 75+ partnerships, and distributing over US$30,000 in event prizes to enable web2 and web3 players to earn while playing.
-</p>
-              {/* Education Cards */}
-              {educationData.map((edu, index) => (
+              <p className="text-lg leading-relaxed">{t.about.intro1}</p>
+              <p className="text-lg leading-relaxed">{t.about.intro2}</p>
+              <p className="text-lg leading-relaxed">{t.about.intro3}</p>
+
+              {educationDataLang[language].map((edu, index) => (
                 <motion.div
                   key={edu.id}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={ANIMATION_VARIANTS.fadeUp}
-                  transition={{ delay: index * 0.1 + 0.4 }} // Slight delay after image
+                  transition={{ delay: index * 0.1 + 0.4 }}
                   className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow"
                 >
                   <div className="flex items-start space-x-4">
@@ -81,18 +74,13 @@ About <GradientText>Me</GradientText>
                           {edu.location}
                         </span>
                       </div>
-                      {edu.gpa && (
-                        <p className="mt-2 text-sm font-medium">
-                          GPA: {edu.gpa}
-                        </p>
-                      )}
+                      {edu.gpa && <p className="mt-2 text-sm font-medium">GPA: {edu.gpa}</p>}
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
-            
-            {/* Personal Image */}
+
             <div className="flex flex-col">
               <motion.div
                 initial="hidden"
@@ -103,7 +91,7 @@ About <GradientText>Me</GradientText>
                 className="flex-grow relative rounded-lg overflow-hidden"
               >
                 <Image
-                  src="https://res.cloudinary.com/dfawdodax/image/upload/v1765564284/Capturar_mzvqzj.png" // Replace with your actual image path
+                  src="https://res.cloudinary.com/dfawdodax/image/upload/v1765564284/Capturar_mzvqzj.png"
                   alt="Enzo Feldman"
                   fill
                   className="object-cover"

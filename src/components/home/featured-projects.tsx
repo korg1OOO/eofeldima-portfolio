@@ -5,20 +5,25 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProjectCard } from "@/components/ui/project-card";
 import { Button } from "@/components/ui/button";
-import { projects } from "@/data/projects";
+import { projectsLang } from "@/data/projects";
 import { 
   ScrollReveal, 
   StaggerContainer, 
   StaggerItem,
   MagneticButton 
 } from "@/components/animations";
+import { useLanguage } from "@/app/contexts/LanguageContext";
+import { translations } from "@/lib/translations";
 
 export function FeaturedProjects() {
-  // Get featured projects - using available project IDs
+  const { language } = useLanguage();
+  const t = translations[language];
+  const currentProjects = projectsLang[language];
+
   const featuredProjects = [
-    projects.find(p => p.id === "automatta"),
-    projects.find(p => p.id === "legacygg")
-  ].filter(Boolean) as typeof projects;
+    currentProjects.find(p => p.id === "automatta"),
+    currentProjects.find(p => p.id === "legacygg")
+  ].filter(Boolean);
 
   return (
     <section className="py-20 bg-background">
@@ -31,9 +36,11 @@ export function FeaturedProjects() {
             transition={{ duration: 0.5 }}
             className="text-center mb-12 w-full mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Projects</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              {t.projects.title}
+            </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              A selection of my recent work showcasing full-stack development and skills application.
+              {t.projects.subtitle}
             </p>
           </motion.div>
         </ScrollReveal>
@@ -58,7 +65,7 @@ export function FeaturedProjects() {
           <MagneticButton>
             <Link href="/projects">
               <Button size="lg" className="group bg-lavender hover:bg-lavender-dark text-white">
-                View All Projects
+                {language === "pt" ? "Ver Todos os Projetos" : "View All Projects"}
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
