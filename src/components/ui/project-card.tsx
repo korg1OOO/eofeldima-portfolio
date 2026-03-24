@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, X } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LavenderBadge } from "@/components/ui/lavender-badge";
 import { TiltCard } from "@/components/animations";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/contexts/LanguageContext";
 
 interface Project {
@@ -31,108 +32,201 @@ interface ProjectCardProps {
 export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
   const { language } = useLanguage();
   const [showAllTech, setShowAllTech] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const techToShow = showAllTech ? project.technologies : project.technologies.slice(0, 4);
   const hasMoreTech = project.technologies.length > 4;
 
   return (
-    <TiltCard className="h-full">
-      <Card className="project-card group h-full flex flex-col hover:shadow-xl transition-all duration-300 overflow-hidden border-border/50 hover:border-primary/50">
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10">
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={false}
-              onError={(e) => {
-                console.error(`Failed to load image: ${project.image}`);
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-6xl opacity-20">💻</span>
-            </div>
-          )}
-        </div>
-        
-        <CardHeader className="pb-3">
-          <h3 className="text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors text-left">
-            {project.title}
-          </h3>
-        </CardHeader>
-        
-        <CardContent className="flex-grow flex flex-col">
-          <p className="text-muted-foreground mb-4 text-sm leading-relaxed line-clamp-3 text-left">
-            {project.description}
-          </p>
-          
-          {detailed && project.features && (
-            <div className="mb-4 space-y-1">
-              {project.features.slice(0, 2).map((feature, i) => (
-                <p key={i} className="text-xs text-muted-foreground/80 flex items-start">
-                  <span className="mr-2 text-primary">•</span>
-                  <span className="line-clamp-2">{feature}</span>
-                </p>
-              ))}
-            </div>
-          )}
-          
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {techToShow.map((tech) => (
-              <LavenderBadge key={tech}>
-                {tech}
-              </LavenderBadge>
-            ))}
-            {hasMoreTech && (
-              <button
-                onClick={() => setShowAllTech(!showAllTech)}
-                className="inline-flex items-center"
-              >
-                <LavenderBadge 
-                  variant="outline" 
-                  className="cursor-pointer hover:bg-primary/10 hover:border-primary/50 transition-colors"
-                >
-                  {showAllTech 
-                    ? (language === "pt" ? "Mostrar menos" : "Show less")
-                    : `+${project.technologies.length - 4} ${language === "pt" ? "mais" : "more"}`
-                  }
-                </LavenderBadge>
-              </button>
+    <>
+      <TiltCard className="h-full">
+        <Card className="project-card group h-full flex flex-col hover:shadow-xl transition-all duration-300 overflow-hidden border-border/50 hover:border-primary/50">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={false}
+                onError={(e) => {
+                  console.error(`Failed to load image: ${project.image}`);
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-6xl opacity-20">💻</span>
+              </div>
             )}
           </div>
-          
-          <div className="mt-auto flex gap-2 pt-4 border-t border-border/50">
-            {project.demoUrl && (
-              <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  {language === "pt" ? "Ver no ar" : "Deployed"}
-                </Button>
-              </Link>
+
+          <CardHeader className="pb-3">
+            <h3 className="text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors text-left">
+              {project.title}
+            </h3>
+          </CardHeader>
+
+          <CardContent className="flex-grow flex flex-col">
+            <p className="text-muted-foreground mb-4 text-sm leading-relaxed line-clamp-3 text-left">
+              {project.description}
+            </p>
+
+            {detailed && project.features && (
+              <div className="mb-4 space-y-1">
+                {project.features.slice(0, 2).map((feature, i) => (
+                  <p key={i} className="text-xs text-muted-foreground/80 flex items-start">
+                    <span className="mr-2 text-primary">•</span>
+                    <span className="line-clamp-2">{feature}</span>
+                  </p>
+                ))}
+              </div>
             )}
 
-            {project.githubUrl && (
-              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all"
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {techToShow.map((tech) => (
+                <LavenderBadge key={tech}>{tech}</LavenderBadge>
+              ))}
+              {hasMoreTech && (
+                <button
+                  onClick={() => setShowAllTech(!showAllTech)}
+                  className="inline-flex items-center"
                 >
-                  <Github className="w-4 h-4" />
-                  {language === "pt" ? "GitHub" : "GitHub"}
-                </Button>
-              </Link>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </TiltCard>
+                  <LavenderBadge variant="outline" className="cursor-pointer hover:bg-primary/10 hover:border-primary/50 transition-colors">
+                    {showAllTech 
+                      ? (language === "pt" ? "Mostrar menos" : "Show less")
+                      : `+${project.technologies.length - 4} ${language === "pt" ? "mais" : "more"}`
+                    }
+                  </LavenderBadge>
+                </button>
+              )}
+            </div>
+
+            <div className="mt-auto flex gap-2 pt-4 border-t border-border/50">
+              {project.demoUrl && (
+                <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all">
+                    <ExternalLink className="w-4 h-4" />
+                    {language === "pt" ? "Ver no ar" : "Deployed"}
+                  </Button>
+                </Link>
+              )}
+
+              {project.githubUrl && (
+                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all">
+                    <Github className="w-4 h-4" />
+                    GitHub
+                  </Button>
+                </Link>
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                onClick={() => setIsModalOpen(true)}
+              >
+                {language === "pt" ? "Ver Detalhes" : "View Details"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </TiltCard>
+
+      {/* Beautiful Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            />
+
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            >
+              <div className="bg-background max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl">
+                {/* Image */}
+                <div className="relative h-64">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="p-8">
+                  <h2 className="text-3xl font-bold mb-4">{project.title}</h2>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    {project.longDescription}
+                  </p>
+
+                  {/* Technologies */}
+                  <div className="mb-6">
+                    <h4 className="font-semibold mb-3">Tecnologias utilizadas</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech) => (
+                        <LavenderBadge key={tech}>{tech}</LavenderBadge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div>
+                    <h4 className="font-semibold mb-3">Principais funcionalidades</h4>
+                    <ul className="space-y-2">
+                      {project.features.map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm">
+                          <span className="text-primary mt-1">•</span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Footer buttons */}
+                <div className="flex gap-3 p-6 border-t">
+                  {project.demoUrl && (
+                    <Link href={project.demoUrl} target="_blank" className="flex-1">
+                      <Button className="w-full">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        {language === "pt" ? "Ver Projeto Online" : "View Live Project"}
+                      </Button>
+                    </Link>
+                  )}
+                  {project.githubUrl && (
+                    <Link href={project.githubUrl} target="_blank" className="flex-1">
+                      <Button variant="outline" className="w-full">
+                        <Github className="w-4 h-4 mr-2" />
+                        GitHub
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

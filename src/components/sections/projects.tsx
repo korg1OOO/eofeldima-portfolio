@@ -1,38 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
 import { projectsLang } from "@/data/projects";
 import { ANIMATION_VARIANTS } from "@/lib/constants";
-import { ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { LavenderBadge } from "@/components/ui/lavender-badge";
+import { ProjectCard } from "@/components/ui/project-card";
 import { useLanguage } from "@/app/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
-
-function ProjectTechStack({ technologies }: { technologies: string[] }) {
-  const [showAllTech, setShowAllTech] = useState(false);
-  const techToShow = showAllTech ? technologies : technologies.slice(0, 4);
-  const hasMoreTech = technologies.length > 4;
-
-  return (
-    <div className="flex flex-wrap gap-1.5 mb-4">
-      {techToShow.map((tech) => (
-        <LavenderBadge key={tech}>{tech}</LavenderBadge>
-      ))}
-      {hasMoreTech && (
-        <button onClick={() => setShowAllTech(!showAllTech)} className="inline-flex items-center">
-          <LavenderBadge variant="outline" className="cursor-pointer hover:bg-primary/10 hover:border-primary/50 transition-colors">
-            {showAllTech ? "Mostrar menos" : `+${technologies.length - 4} mais`}
-          </LavenderBadge>
-        </button>
-      )}
-    </div>
-  );
-}
 
 export function Projects() {
   const { language } = useLanguage();
@@ -61,7 +34,7 @@ export function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-wrap justify-center gap-6"
+          className="flex flex-wrap justify-center gap-8"
         >
           {currentProjects.map((project, index) => (
             <motion.div
@@ -73,57 +46,7 @@ export function Projects() {
               transition={{ delay: index * 0.1 }}
               className="w-full max-w-md"
             >
-              <Card className="group h-full overflow-hidden hover:shadow-xl transition-all duration-300 border-border/50 hover:border-primary/50">
-                <div className="relative h-56 overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10">
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-6xl opacity-20">💻</span>
-                    </div>
-                  )}
-                </div>
-
-                <CardHeader>
-                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2 text-left">
-                    {project.title}
-                  </h3>
-                </CardHeader>
-
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 text-sm leading-relaxed text-left">
-                    {project.description}
-                  </p>
-
-                  <div className="space-y-1 mb-4">
-                    {project.features.slice(0, 2).map((feature, i) => (
-                      <p key={i} className="text-xs text-muted-foreground/80 flex items-start">
-                        <span className="mr-2 text-primary">•</span>
-                        <span className="line-clamp-2">{feature}</span>
-                      </p>
-                    ))}
-                  </div>
-
-                  <ProjectTechStack technologies={project.technologies} />
-
-                  <div className="flex gap-2 pt-4 border-t border-border/50">
-                    {project.demoUrl && (
-                      <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all">
-                          <ExternalLink className="h-4 w-4" />
-                          {language === "pt" ? "Ver no ar" : "Deployed"}
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <ProjectCard project={project} detailed={true} />
             </motion.div>
           ))}
         </motion.div>
