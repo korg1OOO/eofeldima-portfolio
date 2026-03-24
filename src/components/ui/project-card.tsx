@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LavenderBadge } from "@/components/ui/lavender-badge";
@@ -19,6 +19,7 @@ interface Project {
   features: string[];
   image: string;
   demoUrl?: string;
+  githubUrl?: string;
   category: string;
 }
 
@@ -113,6 +114,19 @@ export function ProjectCard({ project, detailed = false }: ProjectCardProps) {
                 >
                   <ExternalLink className="w-4 h-4" />
                   {language === "pt" ? "Ver no ar" : "Deployed"}
+                </Button>
+              </Link>
+            )}
+
+            {project.githubUrl && (
+              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all"
+                >
+                  <Github className="w-4 h-4" />
+                  {language === "pt" ? "GitHub" : "GitHub"}
                 </Button>
               </Link>
             )}
