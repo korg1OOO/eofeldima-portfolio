@@ -3,13 +3,24 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LavenderBadge } from "@/components/ui/lavender-badge";
-import type { Project } from "@/data/projects";
 import { TiltCard } from "@/components/animations";
 import { useLanguage } from "@/app/contexts/LanguageContext";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  longDescription: string;
+  technologies: string[];
+  features: string[];
+  image: string;
+  demoUrl?: string;
+  category: string;
+}
 
 interface ProjectCardProps {
   project: Project;

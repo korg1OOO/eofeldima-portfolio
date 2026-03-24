@@ -43,7 +43,9 @@ export function SkillsShowcase() {
             {t.skills.title}
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {language === "pt" ? "Uma seleção das minhas principais habilidades técnicas" : "A selection of my core technical skills"}
+            {language === "pt" 
+              ? "Uma seleção das minhas principais habilidades técnicas" 
+              : "A selection of my core technical skills"}
           </p>
         </motion.div>
 
@@ -64,7 +66,7 @@ export function SkillsShowcase() {
                     <CardTitle>{category.title}</CardTitle>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {descriptions[category.title]}
+                    {descriptions[category.title as keyof typeof descriptions]}
                   </p>
                 </CardHeader>
                 <CardContent>

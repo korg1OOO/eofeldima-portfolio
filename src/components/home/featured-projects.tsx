@@ -20,10 +20,11 @@ export function FeaturedProjects() {
   const t = translations[language];
   const currentProjects = projectsLang[language];
 
+  // Tipo explícito para garantir que nunca seja undefined
   const featuredProjects = [
     currentProjects.find(p => p.id === "automatta"),
     currentProjects.find(p => p.id === "legacygg")
-  ].filter(Boolean);
+  ].filter((p): p is NonNullable<typeof p> => p !== undefined && p !== null);
 
   return (
     <section className="py-20 bg-background">

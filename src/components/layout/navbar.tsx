@@ -44,14 +44,42 @@ export function Navbar() {
   }, [lastScrollY]);
 
   const navbarVariants = {
-    hidden: { y: -100, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 20, mass: 0.5, duration: 0.1 } },
-    exit: { y: -100, opacity: 0, transition: { duration: 0.1, ease: "easeInOut" } }
+    hidden: { 
+      y: -100,
+      opacity: 0 
+    },
+    visible: { 
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 20,
+        mass: 0.5,
+        duration: 0.1
+      }
+    },
+    exit: {
+      y: -100,
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+        ease: "easeInOut" as const
+      }
+    }
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -10 },
-    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: 0.05 * i, duration: 0.5, ease: "easeOut" } })
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.05 * i,
+        duration: 0.5,
+        ease: "easeOut" as const
+      }
+    })
   };
 
   if (!mounted) return null;

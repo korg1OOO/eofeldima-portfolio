@@ -39,10 +39,13 @@ export function Skills() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            {t.skills.title} <span className="gradient-text">{t.skills.gradient}</span>
+            {t.skills.title} <span className="gradient-text">Skills</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            {language === "pt" ? "Um kit completo que abrange full-stack, machine learning e blockchain. Aprendendo e adaptando continuamente." : "A comprehensive toolkit spanning full-stack development, machine learning, and blockchain technologies. Continuously learning and adapting to new technologies."}
+            {language === "pt" 
+              ? "Um kit completo que abrange full-stack, machine learning e blockchain. Aprendendo e adaptando continuamente." 
+              : "A comprehensive toolkit spanning full-stack development, machine learning, and blockchain technologies. Continuously learning and adapting to new technologies."
+            }
           </p>
         </motion.div>
 
@@ -64,9 +67,10 @@ export function Skills() {
                       <CardTitle className="text-lg sm:text-xl">{category.title}</CardTitle>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {descriptions[category.title]}
+                      {descriptions[category.title as keyof typeof descriptions]}
                     </p>
                   </CardHeader>
+                  
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {category.skills.map((skill, skillIndex) => (
@@ -75,9 +79,16 @@ export function Skills() {
                           initial={{ opacity: 0, scale: 0.8 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.3, delay: categoryIndex * 0.1 + skillIndex * 0.05, ease: "easeOut" }}
+                          transition={{
+                            duration: 0.3,
+                            delay: categoryIndex * 0.1 + skillIndex * 0.05,
+                            ease: "easeOut"
+                          }}
                         >
-                          <Badge variant="secondary" className="text-xs px-3 py-1.5 bg-muted/50 hover:bg-muted transition-colors duration-200 border border-border/50 hover:border-primary/30">
+                          <Badge 
+                            variant="secondary" 
+                            className="text-xs px-3 py-1.5 bg-muted/50 hover:bg-muted transition-colors duration-200 border border-border/50 hover:border-primary/30"
+                          >
                             {skill.name}
                           </Badge>
                         </motion.div>
@@ -98,7 +109,10 @@ export function Skills() {
           className="mt-12 text-center"
         >
           <p className="text-sm text-muted-foreground">
-            {language === "pt" ? "Também experiente com: Git, REST APIs, Integrações de Pagamento e Documentação Técnica" : "Also experienced with: Git, REST APIs, Payment Integrations and Technical Documentation"}
+            {language === "pt" 
+              ? "Também experiente com: Git, REST APIs, Integrações de Pagamento e Documentação Técnica" 
+              : "Also experienced with: Git, REST APIs, Payment Integrations and Technical Documentation"
+            }
           </p>
         </motion.div>
       </div>

@@ -1,4 +1,3 @@
-// app/(pages)/hero.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -49,7 +48,10 @@ export function Hero() {
           >
             {t.hero.tagline}
             <span className="block mt-2">
-              <Typewriter words={t.hero.typewriter} className="text-primary font-semibold" />
+              <Typewriter 
+                words={[...t.hero.typewriter]} 
+                className="text-primary font-semibold" 
+              />
             </span>
           </motion.div>
           <motion.div
