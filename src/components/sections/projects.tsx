@@ -12,6 +12,12 @@ export function Projects() {
   const t = translations[language];
   const currentProjects = projectsLang[language];
 
+  const mutableProjects = currentProjects.map(project => ({
+    ...project,
+    technologies: [...project.technologies],
+    features: [...project.features],
+  }));
+
   return (
     <section className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto max-w-6xl">
@@ -36,7 +42,7 @@ export function Projects() {
           transition={{ duration: 0.3 }}
           className="flex flex-wrap justify-center gap-8"
         >
-          {currentProjects.map((project, index) => (
+          {mutableProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial="hidden"
